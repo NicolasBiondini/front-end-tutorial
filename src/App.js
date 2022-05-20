@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+
+import "./App.css";
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        // We fetch the data
+        const response = await fetch("http://localhost:3001/");
+        const data = await response.json();
+        // We set the data into the users const
+        setUsers(data.users);
+      } catch (error) {
+        console.error("Something go wrong.", error);
+      }
+    };
+    getData();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello dev.com 👋!</h1>
+      <h2>This is a simple tutorial about fetching data from nodejs.</h2>
+      <ul>
+        {users.map((user) => {
+          return (
+            <li key={user.lastname}>
+              {user.name} {user.lastname}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
